@@ -1,0 +1,24 @@
+Enter Input: <%= text_field_tag "calculate" %>
+<%= button_tag "Calculate" ,id: "calculate_button" %>
+<div id="result"></div>
+<script type="text/javascript">
+  $(document).ready(function(){
+  	$("#calculate_button").click(function(){
+  	  value = $("#calculate").val()
+  	  if (value.length == 0){
+  	  	alert("Please Enter a Value")
+  	  }else{
+        jQuery.ajax({
+          type: 'POST',
+          url: "/calculate",
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {value: value},
+          dataType: "JSON",
+          success: function(resultData) { 
+          	  $("#result").html(resultData["message"])
+          }
+	  	});
+  	  }
+  	})
+  })	
+</script>
